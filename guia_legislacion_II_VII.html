@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Estudio — Legislación Profesional II–VII</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0f1117;
+    --sidebar-bg: #161b27;
+    --card-bg: #1a2035;
+    --card-border: #2a3350;
+    --accent: #4ade9a;
+    --accent2: #7c6ff7;
+    --text: #e2e8f0;
+    --muted: #8896b3;
+    --heading: #ffffff;
+    --tag-bg: rgba(74,222,154,0.12);
+    --tag-color: #4ade9a;
+    --detail-bg: #111827;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: 260px; min-width: 260px; background: var(--sidebar-bg);
+    border-right: 1px solid var(--card-border); padding: 1.5rem 0;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column;
+  }
+  .sidebar-title { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: var(--accent); text-transform: uppercase; padding: 0 1.25rem .75rem; }
+  .unit-group { margin-bottom: .25rem; }
+  .unit-label {
+    font-size: 13px; font-weight: 600; color: var(--heading); padding: .55rem 1.25rem;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    border-left: 3px solid transparent; transition: background .15s, border-color .15s;
+  }
+  .unit-label:hover { background: rgba(255,255,255,.04); }
+  .unit-label.active { border-left-color: var(--accent); background: rgba(74,222,154,.07); color: var(--accent); }
+  .unit-label .chevron { font-size: 10px; transition: transform .2s; }
+  .unit-label.open .chevron { transform: rotate(90deg); }
+  .unit-topics { display: none; padding-left: 1.5rem; }
+  .unit-topics.open { display: block; }
+  .topic-link {
+    font-size: 12.5px; color: var(--muted); padding: .35rem .75rem .35rem 0;
+    display: block; cursor: pointer; border-left: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .topic-link:hover { color: var(--text); }
+  .topic-link.active { color: var(--accent); border-left-color: var(--accent); }
+
+  /* MAIN */
+  #main { flex: 1; padding: 2.5rem 3rem; max-width: 900px; }
+  .unit-header { display: none; }
+  .unit-header.active { display: block; }
+
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; background: var(--tag-bg); color: var(--tag-color);
+    padding: 3px 10px; border-radius: 20px; margin-bottom: .75rem; }
+  .unit-title { font-size: 2rem; font-weight: 700; color: var(--heading); margin-bottom: .5rem; }
+  .unit-subtitle { font-size: 15px; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; max-width: 660px; }
+  .how-card {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
+    padding: 1rem 1.25rem; margin-bottom: 2.5rem; display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .how-icon { font-size: 22px; }
+  .how-card h4 { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
+  .how-card p { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+  .how-card strong { color: var(--text); font-weight: 600; }
+
+  /* SECTION / CARD */
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title { font-size: 1.05rem; font-weight: 600; color: var(--heading); margin: 2rem 0 1rem; display: flex; align-items: center; gap: .5rem; }
+  .section-title::before { content: ''; display: inline-block; width: 3px; height: 18px; background: var(--accent2); border-radius: 2px; }
+
+  .card {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
+    margin-bottom: .85rem; overflow: hidden;
+  }
+  .card-header {
+    padding: .9rem 1.1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: background .15s;
+  }
+  .card-header:hover { background: rgba(255,255,255,.03); }
+  .card-header h3 { font-size: 14.5px; font-weight: 600; color: var(--heading); }
+  .card-icon { font-size: 18px; color: var(--muted); transition: transform .25s; }
+  .card.open .card-icon { transform: rotate(45deg); color: var(--accent); }
+  .card-body {
+    display: none; padding: 0 1.1rem 1.1rem; font-size: 14px; line-height: 1.7; color: var(--text);
+    border-top: 1px solid var(--card-border);
+  }
+  .card.open .card-body { display: block; padding-top: .85rem; }
+  .card-body p { margin-bottom: .65rem; }
+  .card-body ul { padding-left: 1.2rem; margin-bottom: .65rem; }
+  .card-body li { margin-bottom: .4rem; }
+  .card-body .highlight { background: rgba(74,222,154,.1); border-left: 3px solid var(--accent); padding: .5rem .75rem; border-radius: 0 6px 6px 0; margin: .75rem 0; font-size: 13.5px; color: var(--text); }
+  .card-body .schema { background: var(--detail-bg); border-radius: 8px; padding: .75rem 1rem; margin: .75rem 0; font-size: 13px; font-family: monospace; color: #a5b4fc; line-height: 1.8; }
+  .card-body strong { color: var(--heading); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin: 1px 2px; }
+  .badge-green { background: rgba(74,222,154,.15); color: #4ade9a; }
+  .badge-purple { background: rgba(124,111,247,.15); color: #a5b4fc; }
+  .badge-orange { background: rgba(251,146,60,.15); color: #fb923c; }
+  .badge-red { background: rgba(248,113,113,.15); color: #f87171; }
+
+  /* FLASH QUIZ */
+  .quiz-section { margin-top: 2.5rem; border-top: 1px solid var(--card-border); padding-top: 2rem; }
+  .quiz-title { font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 1rem; }
+  .quiz-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: .75rem; }
+  .quiz-q { font-size: 14px; font-weight: 600; color: var(--heading); margin-bottom: .6rem; }
+  .quiz-toggle { font-size: 12.5px; color: var(--accent); cursor: pointer; display: inline-block; padding: 3px 0; }
+  .quiz-a { display: none; margin-top: .6rem; font-size: 13.5px; color: var(--text); line-height: 1.65; background: var(--detail-bg); padding: .65rem .85rem; border-radius: 8px; }
+  .quiz-card.revealed .quiz-a { display: block; }
+  .quiz-card.revealed .quiz-toggle { color: var(--muted); }
+
+  @media(max-width:768px){
+    #sidebar{width:100%;min-width:unset;height:auto;position:static;border-right:none;border-bottom:1px solid var(--card-border);}
+    body{flex-direction:column;}
+    #main{padding:1.25rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="sidebar-title">Legislación Profesional</div>
+  <div id="nav"></div>
+</nav>
+
+<main id="main">
+  <div id="content"></div>
+</main>
+
+<script>
+const units = [
+  {
+    id: "u2", label: "II · Elementos de Derecho Público",
+    tag: "UNIDAD II",
+    title: "Elementos de Derecho Público",
+    subtitle: "Organización del Estado, formas de gobierno y de Estado, y la estructura constitucional argentina.",
+    how: "Cada tarjeta esconde un desarrollo completo. Intentá responder antes de abrirla.",
+    sections: [
+      {
+        id: "org", title: "Organización jurídica del Estado",
+        cards: [
+          { h: "Nación vs. Estado", b: `<p><strong>Nación</strong>: concepto <em>sociológico</em>. Grupo humano unido por lengua, religión, etnia, cultura e idiosincrasia comunes. No requiere territorio propio (ej.: gitanos, kurdos).</p><p><strong>Estado</strong>: concepto <em>jurídico</em>. Organización jurídica de una comunidad, compuesta por tres elementos esenciales:</p><div class="schema">1. Territorio\n2. Población\n3. Gobierno (que ejerce el Poder)</div><div class="highlight">Fin del Estado: procurar el bien común → justicia, seguridad, salud, educación y seguridad social.</div>` },
+          { h: "Funciones del Poder del Estado", b: `<p>El Poder no es divisible; lo que se divide son sus <strong>funciones</strong>:</p><ul><li><strong>Ejecutiva/administrativa</strong>: administrar el país, organizar servicios públicos. A cargo del presidente y los ministros.</li><li><strong>Legislativa</strong>: sancionar las leyes. A cargo del Congreso (Cámara de Diputados + Senado).</li><li><strong>Jurisdiccional</strong>: "decir el derecho" en conflictos concretos (del latín <em>iuris dicere</em>). A cargo de los jueces.</li></ul><div class="highlight">Cada órgano controla a los otros dos y cumple secundariamente funciones propias de los restantes.</div>` },
+        ]
+      },
+      {
+        id: "formas", title: "Formas de gobierno y de Estado",
+        cards: [
+          { h: "Formas de gobierno (¿quién?)", b: `<p>Clasificación clásica griega según quién ejerce el Poder:</p><div class="schema">MONARQUÍA      → degenera en: TIRANÍA\nARISTOCRACIA   → degenera en: OLIGARQUÍA\nDEMOCRACIA     → degenera en: DEMAGOGIA</div><p>La democracia puede ser <strong>directa</strong> (los ciudadanos deciden; ej.: cantones suizos) o <strong>indirecta/representativa</strong> (eligen representantes). También se habla de <em>semidirecta</em> con plebiscito, consulta popular, referendo.</p>` },
+          { h: "Formas de Estado propiamente dicha (¿cómo?)", b: `<p>Hace referencia al respeto de libertades de los ciudadanos:</p><ul><li><strong>Totalitarismo</strong>: no respeta libertades civiles ni políticas.</li><li><strong>Autocracia</strong>: respeta libertades civiles pero no políticas.</li><li><strong>República</strong>: respeta todas las libertades. Se basa en 5 principios: primacía de la ley · respeto de libertades y garantías · división de funciones · periodicidad en los cargos · publicidad de los actos de gobierno.</li></ul>` },
+          { h: "Formas de Estado según territorio (¿dónde?)", b: `<div class="schema">UNITARIO        → gobierno central único (ej.: Francia, Chile, Uruguay)\nCONFEDERACIÓN   → estados soberanos que delegan algo mínimo (ej.: UE)\nFEDERAL         → estados que delegan soberanía pero conservan autonomía (ej.: EEUU, Argentina)</div><p>Argentina es formalmente federal, pero en la práctica tiende al unitarismo por motivos históricos, sociológicos, económicos, tributarios y políticos concentrados en CABA.</p>` },
+          { h: "Los 5 principios republicanos", b: `<ul><li><strong>Primacía de la ley</strong>: los gobernantes están sujetos al imperio de la ley.</li><li><strong>Respeto de libertades y garantías</strong>: nadie obligado a lo que la ley no manda, ni privado de lo que no prohíbe (art. 19 CN).</li><li><strong>División de funciones</strong>: ejecutiva, legislativa y jurisdiccional.</li><li><strong>Periodicidad en los cargos</strong>: cargos políticos no vitalicios; jueces sí, para garantizar independencia.</li><li><strong>Publicidad de los actos de gobierno</strong>: todo acto debe publicarse (Boletín Oficial).</li></ul>` },
+        ]
+      }
+    ],
+    quiz: [
+      { q: "¿Cuál es la diferencia entre Nación y Estado?", a: "Nación es un concepto sociológico (grupo humano unido por cultura, lengua, etc.); Estado es un concepto jurídico compuesto por territorio, población y gobierno." },
+      { q: "¿Por qué los cargos judiciales son vitalicios en un sistema republicano?", a: "Para garantizar la independencia del órgano judicial respecto a los órganos políticos (ejecutivo y legislativo)." },
+      { q: "¿Por qué la autocracia respeta las libertades civiles pero no las políticas?", a: "Porque permite a la persona desarrollarse libremente en su vida privada, pero le impide participar en órganos de gobierno o elegir gobernantes." },
+    ]
+  },
+  {
+    id: "u3", label: "III · La Persona y sus Atributos",
+    tag: "UNIDAD III",
+    title: "La Persona y sus Atributos",
+    subtitle: "Concepto de persona, tipos de personas según el CCyC, y los atributos de la personalidad: nombre, domicilio, estado, capacidad y patrimonio.",
+    how: "Prestá atención a las distinciones conceptuales: son las que suelen aparecer en los exámenes.",
+    sections: [
+      {
+        id: "persona", title: "La Persona",
+        cards: [
+          { h: "Concepto y etimología", b: `<p>El término <em>persona</em> proviene del teatro griego: las máscaras con abertura para emitir sonido eran <em>personare</em> ("para sonar"). La persona es quien, en el mundo jurídico, tiene voz y puede hacerse oír.</p><p>Tres conceptos de persona:</p><ul><li><strong>Teológico</strong>: ser creado a imagen y semejanza de Dios.</li><li><strong>Filosófico</strong> (Boecio): "sustancia individual de naturaleza racional".</li><li><strong>Jurídico</strong>: "ente susceptible de adquirir derechos y contraer obligaciones".</li></ul>` },
+          { h: "Tipos de personas (CCyC)", b: `<p><strong>Persona humana</strong> (art. 19 CCyC): su existencia comienza con la concepción. Termina con la muerte (art. 93). Condición resolutoria: los derechos del concebido quedan irrevocablemente adquiridos si nace con vida (art. 21).</p><p><strong>Persona jurídica</strong> (art. 141): entes a los que el ordenamiento les confiere aptitud para adquirir derechos y contraer obligaciones, limitada al objeto y fines para los que fueron creados.</p><div class="schema">PÚBLICAS: Estado nacional, provincias, CABA, municipios,\n         entidades autárquicas, estados extranjeros, Iglesia Católica.\nPRIVADAS: sociedades, asociaciones civiles, fundaciones,\n          iglesias (salvo la Católica), mutuales, cooperativas,\n          consorcios de propiedad horizontal.</div>` },
+        ]
+      },
+      {
+        id: "atributos", title: "Atributos de la Personalidad",
+        cards: [
+          { h: "Características de los atributos", b: `<p>Los atributos son cualidades intrínsecas de la persona que la determinan. Son:</p><ul><li><strong>Necesarios</strong>: toda persona tiene uno de cada uno.</li><li><strong>Únicos</strong>: no puede tener más de uno de cada categoría.</li><li><strong>Inalienables</strong>: no puede ser privada de ellos totalmente.</li><li><strong>Imprescriptibles</strong>: no se ganan ni se pierden por el tiempo.</li></ul>` },
+          { h: "Nombre", b: `<p>Forma de individualización jurídica de la persona. Es el <em>dato de identidad por excelencia</em>. Es indivisible.</p><p>Para personas humanas: <strong>nombre propio</strong> + <strong>apellido</strong> (nombre de familia). El apellido surge históricamente del patronímico medieval.</p><p>La ley 18.248 prohíbe inscribir nombres extravagantes, extranjeros sin castellanización, apellidos como nombre, nombres idénticos a hermanos vivos, o más de 3 nombres.</p><div class="highlight">Para modificar el nombre se requiere petición justificada ante juez competente.</div>` },
+          { h: "Domicilio", b: `<p>Asiento jurídico de la persona. Distinguir:</p><ul><li><strong>Residencia</strong>: lugar habitual de vida (valor social, no legal).</li><li><strong>Habitación</strong>: lugar donde se encuentra temporal o accidentalmente.</li></ul><p>Tipos de domicilio:</p><div class="schema">1. De origen: domicilio de los padres al nacer.\n2. Real: donde efectivamente habita.\n3. Legal: el que la autoridad considera o presume.\n4. Fiscal: a efectos tributarios.\n5. Especial: constituido para un fin particular (ej.: contractual, procesal).</div>` },
+          { h: "Estado", b: `<p>Posición jurídica de la persona en sociedad. Hoy se reduce al <strong>estado de familia</strong> (erróneamente llamado "estado civil").</p><p>En Roma existían 3: <em>status familiae</em>, <em>status libertatis</em> y <em>status civitatis</em>. Hoy sólo subsiste el de familia:</p><ul><li><strong>Soltero</strong>: no ha contraído nupcias.</li><li><strong>Casado</strong>: contrajo nupcias legalmente.</li><li><strong>Viudo</strong>: su cónyuge falleció.</li><li><strong>Divorciado</strong>: el vínculo se rompió por sentencia; no deja de serlo si su ex muere.</li></ul>` },
+          { h: "Capacidad", b: `<p>Aptitud para conducirse en la vida de relación y ser sujeto de derechos y obligaciones. Se presume; la incapacidad es excepción.</p><ul><li><strong>Capacidad de hecho</strong>: aptitud para actuar y ejercer derechos. La incapacidad puede ser absoluta (menores impúberes, estado comatoso) o relativa (pródigos, menores adultos). Los incapaces actúan por tutores o curadores.</li><li><strong>Capacidad de derecho</strong>: aptitud para ser titular de derechos. Solo puede ser relativa (ej.: el juez no puede ejercer la abogacía); si fuese absoluta, el ente sería un "muerto civil".</li></ul>` },
+          { h: "Patrimonio", b: `<p>Del latín <em>patris monium</em> ("carga del padre"). Conjunto de bienes susceptibles de apreciación económica y las deudas de una persona.</p><p>Caracteres:</p><div class="schema">1. Universalidad jurídica: abarca todos los bienes y deudas.\n2. Necesario: toda persona lo tiene, aun sin bienes.\n3. Único e indivisible (aunque puede afectarse una parte).\n4. Inalienable: no se transfiere como tal.\n5. Idéntico: se conserva como tal aun variando su contenido.</div><p>Tipos de derechos patrimoniales: <span class="badge badge-purple">Personales/creditorios</span> <span class="badge badge-green">Reales</span> <span class="badge badge-orange">Intelectuales</span></p>` },
+        ]
+      }
+    ],
+    quiz: [
+      { q: "¿En qué se diferencia capacidad de hecho de capacidad de derecho?", a: "La de hecho es la aptitud para actuar y ejercer derechos en la vida de relación (puede ser absoluta o relativa). La de derecho es la aptitud para ser titular de derechos y obligaciones (solo puede ser relativa)." },
+      { q: "¿Por qué no puede existir incapacidad de derecho absoluta?", a: "Porque si una persona no pudiera ser titular de ningún derecho u obligación, jurídicamente sería un 'muerto civil' o una cosa, no una persona." },
+      { q: "¿Cuáles son los 4 caracteres de los atributos de la personalidad?", a: "Necesarios, únicos, inalienables e imprescriptibles." },
+    ]
+  },
+  {
+    id: "u4", label: "IV · Hechos y Actos Jurídicos",
+    tag: "UNIDAD IV",
+    title: "Hechos y Actos Jurídicos",
+    subtitle: "El acto jurídico como pilar del derecho continental, la relación jurídica, nulidades y prescripción.",
+    how: "Armá el árbol de clasificaciones mentalmente: hecho → humano → voluntario → lícito → acto jurídico.",
+    sections: [
+      {
+        id: "relacion", title: "Relación jurídica",
+        cards: [
+          { h: "Elementos de la relación jurídica", b: `<p>Vínculo regulado legalmente que produce consecuencias en el derecho. Sus elementos:</p><ul><li><strong>Sujetos</strong>: activo (titular del derecho subjetivo) y pasivo (obligado).</li><li><strong>Objeto</strong>: la cosa o acción sobre la cual recae, exterior a los sujetos.</li><li><strong>Causa</strong>: la causa eficiente, es decir, el equilibrio en las prestaciones (<em>antipéponthos</em> griego / <em>contrapassio</em> romano).</li></ul>` },
+        ]
+      },
+      {
+        id: "hechos", title: "Clasificación de los hechos",
+        cards: [
+          { h: "Árbol de clasificación", b: `<div class="schema">HECHOS\n├─ De la naturaleza (sin intervención humana)\n└─ Del hombre (humanos)\n   ├─ Involuntarios (reflejos no controlados)\n   └─ Voluntarios\n      ├─ Ilícitos (delitos y cuasidelitos)\n      └─ Lícitos\n         ├─ Sin consecuencias jurídicas\n         └─ Con consecuencias jurídicas → ACTO JURÍDICO</div>` },
+          { h: "Acto jurídico", b: `<p><strong>Definición</strong>: hecho humano voluntario lícito que produce efectos jurídicos. Es el pilar del derecho positivo continental (herencia del Código Napoleón de 1804).</p><p>Clases de actos:</p><ul><li><strong>Disposición</strong>: transmisión de un bien.</li><li><strong>Administración</strong>: obtención de frutos de un bien.</li><li><strong>Conservación</strong>: mantenimiento sin obtener frutos.</li></ul><p>La manifestación de voluntad puede ser <strong>expresa</strong> o <strong>tácita</strong> (incluso el silencio puede serlo). Requiere discernimiento, intención y libertad.</p>` },
+        ]
+      },
+      {
+        id: "nulidad", title: "Nulidad de los actos jurídicos",
+        cards: [
+          { h: "Concepto y clasificaciones", b: `<p>Sanción legal que priva a un acto jurídico de sus efectos propios, por una causa existente al momento de su celebración (vicios del consentimiento: error, fraude, simulación, coacción).</p><p><strong>1ª clasificación</strong> (según visibilidad del vicio):</p><ul><li><span class="badge badge-red">Nulo</span>: el vicio es manifiesto (evidente). Ej.: venta de la Casa Rosada por un particular.</li><li><span class="badge badge-orange">Anulable</span>: el vicio no es manifiesto; el acto produce efectos hasta la declaración judicial. Ej.: venta de un inmueble ajeno.</li></ul><p><strong>2ª clasificación</strong> (según posibilidad de confirmación):</p><ul><li><span class="badge badge-red">Nulidad absoluta</span>: los sujetos no pueden confirmar el acto. Ej.: matrimonio con un animal.</li><li><span class="badge badge-orange">Nulidad relativa</span>: los sujetos pueden confirmarlo una vez eliminado el vicio. Ej.: menor que vende un inmueble y lo confirma al llegar a la mayoría de edad.</li></ul><div class="highlight">Ambas clasificaciones se combinan: existen actos nulos/anulables de nulidad absoluta/relativa.</div>` },
+        ]
+      },
+      {
+        id: "prescripcion", title: "Prescripción",
+        cards: [
+          { h: "Tipos de prescripción", b: `<p>Instituto romano que implica la adquisición o pérdida de un derecho por el transcurso del tiempo. Esencial para la seguridad jurídica.</p><ul><li><strong>Adquisitiva (usucapión)</strong>: adquisición de un derecho real por ejercerse como dueño durante el plazo que la ley prevea. Se declara judicialmente.</li><li><strong>Liberatoria</strong>: pérdida de la <em>facultad de reclamar</em> judicialmente un derecho (no el derecho en sí). La obligación subsiste como "natural": si se paga voluntariamente no puede reclamarse su repetición.</li></ul>` },
+        ]
+      }
+    ],
+    quiz: [
+      { q: "¿Por qué el acto jurídico es una 'entelequia'?", a: "Porque es un artificio jurídico sobre el que se asienta toda la estructura del derecho positivo moderno continental. Todo lo que tenga entidad jurídica negocial se circunscribe a ese concepto." },
+      { q: "Diferencia entre acto nulo y acto anulable", a: "En el acto nulo el vicio es manifiesto (evidente). En el acto anulable el vicio no es visible y el acto produce efectos hasta que un juez lo declare nulo." },
+      { q: "¿Qué diferencia hay entre prescripción adquisitiva y liberatoria?", a: "La adquisitiva (usucapión) genera la adquisición de un derecho por ejercerlo durante el tiempo legal. La liberatoria es la pérdida de la acción para reclamar judicialmente un derecho, aunque la obligación subsiste como obligación natural." },
+    ]
+  },
+  {
+    id: "u5", label: "V · Obligaciones",
+    tag: "UNIDAD V",
+    title: "Obligaciones",
+    subtitle: "El vínculo jurídico que constriñe a dar, hacer o no hacer, su clasificación, fuentes, responsabilidad y extinción.",
+    how: "La definición romana es la clave. Todo lo demás se desprende de ella.",
+    sections: [
+      {
+        id: "concepto5", title: "Concepto y clasificaciones",
+        cards: [
+          { h: "Definición", b: `<p>"Vínculo jurídico que constriñe en la necesidad de dar, hacer o no hacer algo según el derecho positivo." (Definición romana clásica)</p><p>Art. 724 CCyC: "relación jurídica en virtud de la cual el acreedor tiene el derecho a exigir del deudor una prestación destinada a satisfacer un interés lícito y, ante el incumplimiento, a obtener forzadamente la satisfacción de dicho interés."</p><div class="highlight">"Constreñir" = atar con cadenas. Implica acreedor y deudor con consecuencias jurídicas.</div>` },
+          { h: "Clasificaciones de las obligaciones", b: `<div class="schema">1. Civiles / naturales (¿prescripta la acción?)\n2. Principales / accesorias\n3. Divisibles / indivisibles\n4. Dar / hacer / no hacer  ← clasificación principal\n5. De medios / de resultados\n6. Simplemente mancomunadas / solidarias</div><p><strong>Solidarias</strong>: el acreedor puede reclamar el total de la deuda a cualquiera de los deudores, quien luego repetirá contra los demás.</p>` },
+        ]
+      },
+      {
+        id: "fuentes", title: "Fuentes y Responsabilidad",
+        cards: [
+          { h: "Obligaciones contractuales y extracontractuales", b: `<p>Fuentes principales de obligaciones: <strong>contrato</strong> e <strong>ilícito civil</strong> (delito civil o cuasidelito). También la ley directamente.</p><p>La <strong>mora</strong> determina cuándo es exigible la obligación. Principio general: mora automática por el solo transcurso del plazo (art. 886 CCyC). Excepciones: plazo tácito (la naturaleza de la obligación lo determina) y plazo indeterminado (lo fija el juez).</p>` },
+          { h: "Presupuestos de la responsabilidad", b: `<p>Para que haya obligación de responder, deben concurrir <strong>4 presupuestos</strong>:</p><ul><li>Incumplimiento material del deudor.</li><li>Factores de atribución o imputabilidad.</li><li>Existencia de un daño.</li><li>Relación de causalidad entre incumplimiento y daño.</li></ul>` },
+          { h: "Factores de atribución", b: `<ul><li><span class="badge badge-orange">Culpa</span>: negligencia, impericia, imprudencia. Ej.: mirar el teléfono al manejar.</li><li><span class="badge badge-orange">Culpa grave</span>: negligencia de entidad superior. Ej.: manejar con exceso notorio de velocidad esperando poder esquivar.</li><li><span class="badge badge-red">Dolo</span>: intención deliberada de dañar.</li><li><span class="badge badge-red">Dolo eventual</span>: el agente se representa la posible consecuencia dañosa pero decide seguir adelante.</li><li><span class="badge badge-purple">Riesgo creado</span>: responsabilidad objetiva por el riesgo de una cosa o actividad lícita que escapa al control del dueño.</li></ul>` },
+        ]
+      },
+      {
+        id: "extincion", title: "Extinción de las Obligaciones",
+        cards: [
+          { h: "Modos de extinción", b: `<div class="schema">1. Pago          → cumplimiento de la prestación (art. 865)\n2. Novación      → nueva obligación reemplaza a la anterior (art. 933)\n3. Transacción   → ambas partes ceden algo para acordar (litigio)\n4. Confusión     → acreedor y deudor se reúnen en una misma persona (art. 931)\n5. Compensación  → deudas recíprocas de igual naturaleza se cancelan (art. 921)\n6. Renuncia      → el acreedor libera voluntariamente al deudor (art. 944)\n7. Imposibilidad → incumplimiento por caso fortuito/fuerza mayor sin culpa (art. 955)</div>` },
+        ]
+      }
+    ],
+    quiz: [
+      { q: "¿Cuál es la diferencia entre mora y demora?", a: "La demora es un simple retraso en el cumplimiento. La mora es un retraso culpable o deliberado que genera efectos jurídicos (cómputo de intereses moratorios). En Argentina, la mora es automática por el solo transcurso del plazo." },
+      { q: "¿Qué diferencia hay entre dolo y dolo eventual?", a: "En el dolo hay intención deliberada de dañar. En el dolo eventual, el agente no quiere dañar pero se representa la posible consecuencia dañosa y decide continuar igual, anteponiendo su conducta al riesgo." },
+      { q: "¿Qué es la novación?", a: "La extinción de una obligación por el nacimiento de una nueva que la reemplaza y subsume (art. 933 CCyC)." },
+    ]
+  },
+  {
+    id: "u6", label: "VI · Contratos",
+    tag: "UNIDAD VI",
+    title: "Contratos",
+    subtitle: "El contrato como principal fuente de obligaciones: concepto, clasificaciones, principio de autonomía de la voluntad y tipos contractuales del CCyC.",
+    how: "Las clasificaciones son combinables entre sí. Memorizá los artículos clave del CCyC.",
+    sections: [
+      {
+        id: "contrato", title: "El contrato",
+        cards: [
+          { h: "Concepto", b: `<p>Art. 957 CCyC: "el acto jurídico mediante el cual dos o más partes manifiestan su consentimiento para crear, regular, modificar, transferir o extinguir relaciones jurídicas patrimoniales."</p><p>Elementos del contrato: <strong>sujetos</strong> (al menos dos), <strong>objeto</strong> (cosa o servicio) y <strong>causa</strong> (finalidad perseguida).</p><div class="highlight">Para que haya contrato: oferta + aceptación plena. Cualquier modificación a la oferta importa una nueva propuesta (art. 978).</div>` },
+          { h: "Autonomía de la voluntad", b: `<p>Las partes son libres para celebrar contratos y determinar su contenido, dentro de los límites de la ley, el orden público, la moral y las buenas costumbres (art. 958).</p><p>Las normas legales son <strong>supletorias</strong> de la voluntad de las partes (art. 962). Todo contrato válidamente celebrado es obligatorio; solo se modifica por acuerdo de partes o por ley (art. 959).</p><p>Los contratos deben interpretarse y ejecutarse de <strong>buena fe</strong> (art. 961).</p>` },
+        ]
+      },
+      {
+        id: "clasificaciones", title: "Clasificaciones",
+        cards: [
+          { h: "Tabla de clasificaciones", b: `<div class="schema">Unilaterales / Bilaterales (art. 966)\nOnerosos / Gratuitos (art. 967)\nConmutativos / Aleatorios (art. 968)\nFormales / No formales (art. 969)\nNominados / Innominados (art. 970)\nConsensual / Real\nCumplimiento único / Tracto sucesivo</div><p><strong>Aleatorio</strong>: las ventajas o pérdidas de alguna parte dependen de un acontecimiento incierto.</p><p><strong>Innominados</strong>: no regulados específicamente por ley. Se rigen por voluntad de partes → normas generales → usos → normas de contratos afines (art. 970).</p>` },
+        ]
+      },
+      {
+        id: "tipos", title: "Tipos de contratos",
+        cards: [
+          { h: "Compraventa", b: `<p>Art. 1123: una parte (vendedor) se obliga a transferir la propiedad de una cosa y la otra (comprador) a pagar un precio en dinero. Es el contrato <em>paradigma</em>; sus normas se aplican supletoriamente a contratos similares (art. 1124).</p><p>Precio determinado cuando lo fijan las partes o lo fija un tercero designado (art. 1133). El vendedor debe transferir la propiedad y poner a disposición los instrumentos requeridos (art. 1137).</p>` },
+          { h: "Suministro", b: `<p>Art. 1176: el suministrante se obliga a entregar bienes (incluso servicios sin relación de dependencia) en forma periódica o continuada; el suministrado paga un precio por cada entrega o grupo. Plazo máximo: 20 años para frutos/productos del suelo; 10 años para otros casos (art. 1177).</p>` },
+          { h: "Locación", b: `<p>Art. 1187: una parte otorga a otra el uso y goce temporario de una cosa a cambio de un precio en dinero. Hoy solo existe la locación de cosa (no más locación de servicios ni de obra).</p><p>Plazo mínimo legal: 2 años para inmuebles (art. 1198). Plazo máximo: 20 años (habitacional) / 50 años (otros destinos) (art. 1197).</p>` },
+          { h: "Obra y servicios", b: `<p>Art. 1251: el contratista actúa independientemente obligándose a realizar una obra material o intelectual o un servicio mediante retribución.</p><ul><li><strong>Servicios</strong>: obligación de realizar cierta actividad independientemente de su eficacia (de medios).</li><li><strong>Obra</strong>: se promete un resultado eficaz, reproducible o entregable (de resultado).</li></ul><p>El contratista no puede variar el proyecto sin autorización escrita del comitente (art. 1264). Si las variaciones superan 1/5 del precio, el comitente puede extinguir el contrato en 10 días (art. 1264).</p>` },
+          { h: "Transporte", b: `<p>Art. 1280: el transportista se obliga a trasladar personas o cosas de un lugar a otro; el pasajero o cargador se obliga a pagar el flete.</p><p>Puede ser de personas o de cosas.</p>` },
+        ]
+      }
+    ],
+    quiz: [
+      { q: "¿Cuál es la diferencia entre contrato de obra y de servicios?", a: "El de servicios obliga a realizar una actividad (obligación de medios). El de obra obliga a obtener un resultado concreto, eficaz, reproducible o entregable (obligación de resultado)." },
+      { q: "¿Qué efecto tiene una modificación de la oferta al aceptarla?", a: "No vale como aceptación, sino como propuesta de un nuevo contrato (art. 978 CCyC). El oferente puede admitirla comunicándolo de inmediato." },
+      { q: "¿Cuál es el plazo mínimo legal de locación de inmuebles?", a: "2 años (art. 1198 CCyC), salvo excepciones como embajadas, habitación turística, guarda de cosas, etc." },
+    ]
+  },
+  {
+    id: "u7", label: "VII · Derechos Reales",
+    tag: "UNIDAD VII",
+    title: "Derechos Reales",
+    subtitle: "Las cosas, la distinción con los derechos personales, el sistema de numerus clausus y la enumeración de derechos reales del CCyC.",
+    how: "La clave es entender la oposición persona-persona (personal) vs. persona-cosa (real).",
+    sections: [
+      {
+        id: "cosas", title: "Las cosas",
+        cards: [
+          { h: "Concepto y clasificación", b: `<p><strong>Cosa</strong>: todo objeto material susceptible de tener valor económico, incluyendo fuerzas de la naturaleza apropiables (ej.: energía eléctrica).</p><div class="schema">CLASIFICACIONES:\n1. Fungibles (consumibles) / No fungibles\n   Ej. fungible: dinero, kilos de naranjas.\n   Ej. no fungible: cuadro de pintor específico.\n\n2. Muebles (trasladables) / Inmuebles (adheridas al suelo)\n   Los muebles que se mueven solos: semovientes.\n\n3. Principales / Accesorias\n   La accesoria sigue la suerte jurídica de la principal.</div>` },
+        ]
+      },
+      {
+        id: "reales", title: "Derechos personales vs. reales",
+        cards: [
+          { h: "Derechos personales (creditorios)", b: `<p>Vinculan a <strong>dos o más personas</strong> como acreedor y deudor. Son oponibles solo contra el deudor específico. Son <strong>ilimitados</strong>: las partes pueden crear cualquier tipo de crédito por contrato (principio de autonomía de la voluntad).</p>` },
+          { h: "Derechos reales", b: `<p>Vinculan a <strong>una persona con una cosa</strong> directamente. Son oponibles <em>erga omnes</em> (contra todos). Son <strong>limitados</strong>: sistema de <em>numerus clausus</em> (número cerrado); solo existen los que la ley reconoce. No rige la autonomía de la voluntad.</p><div class="highlight">Si una persona es dueña de un reloj, todas las demás están obligadas a respetar esa relación jurídica.</div>` },
+        ]
+      },
+      {
+        id: "enum", title: "Enumeración de derechos reales (CCyC)",
+        cards: [
+          { h: "Sobre cosa propia", b: `<ul><li><strong>Dominio</strong>: las 3 facultades: usar + gozar + disponer. El más perfecto.</li><li><strong>Condominio</strong>: dominio compartido entre varias personas por partes indivisas.</li><li><strong>Usufructo</strong>: usar + gozar, sin disponer.</li><li><strong>Uso</strong>: solo usar, sin gozar ni disponer.</li><li><strong>Habitación</strong>: especie de uso limitada a habitar la cosa.</li><li><strong>Propiedad horizontal</strong>: dominio sobre unidad funcional + condominio sobre partes comunes del edificio.</li><li><strong>Conjuntos inmobiliarios</strong>: clubs de campo, barrios cerrados, parques industriales, náuticos; tiempos compartidos; cementerios privados.</li></ul>` },
+          { h: "Sobre cosa ajena", b: `<ul><li><strong>Servidumbre</strong>: entre dos inmuebles; otorga una utilidad (vista, paso, desagüe) al inmueble "dominante" sobre el "sirviente".</li><li><strong>Superficie</strong>: derecho temporario sobre inmueble ajeno para plantar, forestar o construir.</li></ul><p><strong>Derechos reales de garantía</strong> (aseguran el cumplimiento de una obligación):</p><ul><li><span class="badge badge-green">Hipoteca</span>: sobre inmuebles y muebles de gran porte (aviones, buques).</li><li><span class="badge badge-purple">Prenda</span>: sobre bienes muebles en general.</li><li><span class="badge badge-orange">Anticresis</span>: sobre los frutos futuros de una cosa (ej.: una cosecha).</li></ul>` },
+        ]
+      }
+    ],
+    quiz: [
+      { q: "¿Por qué los derechos reales son de numerus clausus?", a: "Porque solo existen los que la ley crea expresamente. Las partes no pueden por su voluntad crear nuevos derechos reales, a diferencia de los derechos personales que son ilimitados." },
+      { q: "¿Qué diferencia hay entre dominio, usufructo y uso?", a: "Dominio: usar + gozar + disponer. Usufructo: usar + gozar (sin disponer). Uso: solo usar (sin gozar ni disponer)." },
+      { q: "¿Qué garantiza la hipoteca y qué la prenda?", a: "La hipoteca recae sobre inmuebles y muebles de gran porte (aviones, buques). La prenda recae sobre bienes muebles en general." },
+    ]
+  }
+];
+
+function buildNav() {
+  const nav = document.getElementById('nav');
+  units.forEach((u, ui) => {
+    const group = document.createElement('div');
+    group.className = 'unit-group';
+    const lbl = document.createElement('div');
+    lbl.className = 'unit-label' + (ui === 0 ? ' active open' : '');
+    lbl.dataset.unit = u.id;
+    lbl.innerHTML = u.label + '<span class="chevron">▶</span>';
+    const topics = document.createElement('div');
+    topics.className = 'unit-topics' + (ui === 0 ? ' open' : '');
+    u.sections.forEach(s => {
+      const a = document.createElement('div');
+      a.className = 'topic-link';
+      a.dataset.unit = u.id;
+      a.dataset.section = s.id;
+      a.textContent = s.title;
+      a.onclick = (e) => { e.stopPropagation(); showSection(u.id, s.id); };
+      topics.appendChild(a);
+    });
+    lbl.onclick = () => {
+      const open = lbl.classList.contains('open');
+      document.querySelectorAll('.unit-label').forEach(l => { l.classList.remove('open'); });
+      document.querySelectorAll('.unit-topics').forEach(t => { t.classList.remove('open'); });
+      if (!open) { lbl.classList.add('open'); topics.classList.add('open'); }
+      showUnit(u.id);
+    };
+    group.appendChild(lbl); group.appendChild(topics);
+    nav.appendChild(group);
+  });
+}
+
+function buildContent() {
+  const content = document.getElementById('content');
+  units.forEach((u, ui) => {
+    const hdr = document.createElement('div');
+    hdr.className = 'unit-header' + (ui === 0 ? ' active' : '');
+    hdr.id = 'hdr-' + u.id;
+    hdr.innerHTML = `<div class="tag">${u.tag}</div><h1 class="unit-title">${u.title}</h1><p class="unit-subtitle">${u.subtitle}</p>
+    <div class="how-card"><div class="how-icon">🧠</div><div><h4>Cómo usar esta guía</h4><p>${u.how} Abrí cada tarjeta <strong>después de intentar responder vos mismo</strong>.</p></div></div>`;
+
+    u.sections.forEach(s => {
+      const sec = document.createElement('div');
+      sec.className = 'section' + (ui === 0 && u.sections[0].id === s.id ? ' active' : '');
+      sec.id = 'sec-' + u.id + '-' + s.id;
+      let html = `<div class="section-title">${s.title}</div>`;
+      s.cards.forEach((c, ci) => {
+        html += `<div class="card" id="card-${u.id}-${s.id}-${ci}">
+          <div class="card-header" onclick="toggleCard('card-${u.id}-${s.id}-${ci}')">
+            <h3>${c.h}</h3><span class="card-icon">+</span>
+          </div>
+          <div class="card-body">${c.b}</div>
+        </div>`;
+      });
+      sec.innerHTML = html;
+      hdr.appendChild(sec);
+    });
+
+    // Quiz
+    const qs = document.createElement('div');
+    qs.className = 'quiz-section';
+    qs.innerHTML = `<div class="quiz-title">⚡ Repaso relámpago</div>` +
+      u.quiz.map((q, qi) => `<div class="quiz-card" id="quiz-${u.id}-${qi}">
+        <div class="quiz-q">${q.q}</div>
+        <div class="quiz-toggle" onclick="revealQuiz('quiz-${u.id}-${qi}')">Ver respuesta →</div>
+        <div class="quiz-a">${q.a}</div>
+      </div>`).join('');
+    hdr.appendChild(qs);
+    content.appendChild(hdr);
+  });
+}
+
+function showUnit(uid) {
+  document.querySelectorAll('.unit-header').forEach(h => h.classList.remove('active'));
+  document.querySelectorAll('.unit-label').forEach(l => { l.classList.remove('active'); if (l.dataset.unit === uid) l.classList.add('active'); });
+  const hdr = document.getElementById('hdr-' + uid);
+  if (hdr) { hdr.classList.add('active'); const first = hdr.querySelector('.section'); if (first) { document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); first.classList.add('active'); } }
+  updateTopicLinks(uid, null);
+}
+
+function showSection(uid, sid) {
+  showUnit(uid);
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const sec = document.getElementById('sec-' + uid + '-' + sid);
+  if (sec) sec.classList.add('active');
+  updateTopicLinks(uid, sid);
+}
+
+function updateTopicLinks(uid, sid) {
+  document.querySelectorAll('.topic-link').forEach(l => {
+    l.classList.remove('active');
+    if (l.dataset.unit === uid && (sid === null || l.dataset.section === sid)) l.classList.add('active');
+  });
+}
+
+function toggleCard(id) {
+  const card = document.getElementById(id);
+  if (card) card.classList.toggle('open');
+}
+
+function revealQuiz(id) {
+  const card = document.getElementById(id);
+  if (card) { card.classList.add('revealed'); card.querySelector('.quiz-toggle').textContent = 'Respuesta visible'; }
+}
+
+buildNav();
+buildContent();
+showUnit(units[0].id);
+showSection(units[0].id, units[0].sections[0].id);
+</script>
+</body>
+</html>
